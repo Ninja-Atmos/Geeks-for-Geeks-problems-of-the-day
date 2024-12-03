@@ -1,0 +1,78 @@
+#include <iostream>
+#include <string>
+#include <vector>
+
+class Solution {
+public:
+    bool areRotations(const std::string& s1, const std::string& s2) {
+        if (s1.length() != s2.length()) {
+            return false;
+        }
+        std::string concatenated = s1 + s1;
+        return kmpSearch(concatenated, s2);
+    }
+
+private:
+    std::vector<int> computeLPSArray(const std::string& pattern) {
+        int m = pattern.length();
+        std::vector<int> lps(m, 0);
+        int len = 0;
+        int i = 1;
+        while (i < m) {
+            if (pattern[i] == pattern[len]) {
+                len++;
+                lps[i] = len;
+                i++;
+            } else {
+                if (len != 0) {
+                    len = lps[len - 1];
+                } else {
+                    lps[i] = 0;
+                    i++;
+                }
+            }
+        }
+        return lps;
+    }
+
+    bool kmpSearch(const std::string& text, const std::string& pattern) {
+        int n = text.length();
+        int m = pattern.length();
+        std::vector<int> lps = computeLPSArray(pattern);
+        int i = 0;
+        int j = 0;
+        while (i < n) {
+            if (pattern[j] == text[i]) {
+                i++;
+                j++;
+            }
+            if (j == m) {
+                return true;
+            } else if (i < n && pattern[j] != text[i]) {
+                if (j != 0) {
+                    j = lps[j - 1];
+                } else {
+                    i++;
+                }
+            }
+        }
+        return false;
+    }
+};
+
+int main() {
+    Solution sol;
+    std::string s1 = "abcd";
+    std::string s2 = "cdab";
+    std::cout << (sol.areRotations(s1, s2) ? "true" : "false") << std::endl; // Output: true
+
+    s1 = "aab";
+    s2 = "aba";
+    std::cout << (sol.areRotations(s1, s2) ? "true" : "false") << std::endl; // Output: true
+
+    s1 = "abcd";
+    s2 = "acbd";
+    std::cout << (sol.areRotations(s1, s2) ? "true" : "false") << std::endl; // Output: false
+
+    return 0;
+}
