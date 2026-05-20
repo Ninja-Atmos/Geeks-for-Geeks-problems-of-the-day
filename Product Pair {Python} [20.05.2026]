@@ -1,0 +1,15 @@
+class Solution:
+    def isProduct(self, arr: list[int], target: int) -> bool:
+        seen = set()
+        
+        for x in arr:
+            if x == 0:
+                if target == 0:
+                    return True
+            elif target % x == 0:
+                if (target // x) in seen:
+                    return True
+            
+            seen.add(x)
+            
+        return False
