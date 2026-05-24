@@ -1,0 +1,21 @@
+class Solution {
+public:
+    void toSumTree(Node *node) {
+        solve(node);
+    }
+    
+private:
+    int solve(Node* node) {
+        if (!node) {
+            return 0;
+        }
+        
+        int old_val = node->data;
+        int left_sum = solve(node->left);
+        int right_sum = solve(node->right);
+        
+        node->data = left_sum + right_sum;
+        
+        return old_val + node->data;
+    }
+};
