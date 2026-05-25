@@ -1,0 +1,9 @@
+class Solution:
+    def checkElements(self, start, end, arr):
+        count = 0
+        for num in arr:
+            if start <= num <= end:
+                count += 1
+                
+        required_count = end - start + 1
+        return count == required_count
