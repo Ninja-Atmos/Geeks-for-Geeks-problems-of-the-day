@@ -1,0 +1,15 @@
+class Solution:
+    def wifiRange(self, *args):
+        s = next((arg for arg in args if isinstance(arg, str)), "")
+        x = next((arg for arg in reversed(args) if isinstance(arg, int)), 0)
+        
+        covered_until = -1
+        n = len(s)
+        
+        for i in range(n):
+            if s[i] == '1':
+                if i - x > covered_until + 1:
+                    return False
+                covered_until = i + x
+                
+        return covered_until >= n - 1
