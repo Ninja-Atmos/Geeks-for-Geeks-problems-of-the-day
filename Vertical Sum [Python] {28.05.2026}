@@ -1,0 +1,33 @@
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.left = None
+        self.right = None
+
+class Solution:
+    def verticalSum(self, root: Node) -> list[int]:
+        if not root:
+            return []
+            
+        hd_sums = {}
+        bounds = {"min_hd": float('inf'), "max_hd": float('-inf')}
+        
+        def dfs(node: Node, hd: int):
+            if not node:
+                return
+            
+            bounds["min_hd"] = min(bounds["min_hd"], hd)
+            bounds["max_hd"] = max(bounds["max_hd"], hd)
+            
+            hd_sums[hd] = hd_sums.get(hd, 0) + node.data
+            
+            dfs(node.left, hd - 1)
+            dfs(node.right, hd + 1)
+            
+        dfs(root, 0)
+        
+        ans = []
+        for current_hd in range(bounds["min_hd"], bounds["max_hd"] + 1):
+            ans.append(hd_sums[current_hd])
+            
+        return ans
