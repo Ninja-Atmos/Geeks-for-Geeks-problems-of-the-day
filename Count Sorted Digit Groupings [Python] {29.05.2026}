@@ -1,0 +1,26 @@
+class Solution:
+    def validGroups(self, s: str) -> int:
+        n = len(s)
+        digits = [int(c) for c in s]
+        memo = {}
+        
+        def dp(idx, prev_sum):
+            if idx == n:
+                return 1
+                
+            if (idx, prev_sum) in memo:
+                return memo[(idx, prev_sum)]
+            
+            total_ways = 0
+            current_sum = 0
+            
+            for j in range(idx, n):
+                current_sum += digits[j]
+                
+                if current_sum >= prev_sum:
+                    total_ways += dp(j + 1, current_sum)
+                    
+            memo[(idx, prev_sum)] = total_ways
+            return total_ways
+            
+        return dp(0, 0)
